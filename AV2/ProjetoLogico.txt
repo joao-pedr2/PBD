@@ -1,0 +1,138 @@
+// ------------------------------------
+// GRUPO 1: DOMÍNIOS E CONFIGURAÇÕES
+// ------------------------------------
+Table DOMINIO_STATUS {
+  id_status int [pk]
+  tipo_entidade varchar [note: "Carro, Contrato, Pagamento"]
+  valor_status varchar [note: "LIVRE, ALUGADO, EM_MANUTENCAO, PAGO, PENDENTE"]
+}
+
+Table TIPO_LOJA {
+  id_tipo_loja int [pk]
+  nome_tipo varchar [note: "AEROPORTO, CIDADE"]
+}
+
+Table NIVEL_ACESSO {
+  id_nivel int [pk]
+  nome_nivel varchar [note: "ADMIN, ATENDENTE"]
+}
+
+Table CIDADE {
+  id_cidade int [pk]
+  nome varchar
+}
+
+// ------------------------------------
+// GRUPO 2: ESTRUTURA E PESSOAS
+// ------------------------------------
+Table LOJA {
+  id_loja int [pk]
+  nome_loja varchar
+  id_cidade int [ref: > CIDADE.id_cidade]
+  id_tipo_loja int [ref: > TIPO_LOJA.id_tipo_loja]
+}
+
+Table USUARIO {
+  id_usuario int [pk]
+  nome varchar
+  login varchar
+  id_loja int [ref: > LOJA.id_loja]
+  id_nivel int [ref: > NIVEL_ACESSO.id_nivel]
+}
+
+Table CLIENTE {
+  id_cliente int [pk]
+  nome varchar
+  cpf varchar
+  cnh varchar
+}
+
+Table MOTORISTA {
+  id_motorista int [pk]
+  nome varchar
+  cnh varchar
+}
+
+// ------------------------------------
+// GRUPO 3: FROTA E ATIVOS
+// ------------------------------------
+Table CATEGORIA {
+  id_categoria int [pk]
+  nome_categoria varchar [note: "BÁSICO, SUV, LUXO"]
+}
+
+Table TABELA_PRECO {
+  id_preco int [pk]
+  preco_7_dias decimal
+  preco_15_dias decimal
+  preco_30_dias decimal
+  id_categoria int [ref: > CATEGORIA.id_categoria]
+}
+
+Table CARRO {
+  id_carro int [pk]
+  placa varchar [unique]
+  chassi varchar [unique]
+  nivel_combustivel decimal [note: "0.0 a 1.0 (Tanque)"]
+  id_status int [ref: > DOMINIO_STATUS.id_status]
+  id_categoria int [ref: > CATEGORIA.id_categoria]
+  id_loja_atual int [ref: > LOJA.id_loja]
+}
+
+Table ACESSORIO {
+  id_acessorio int [pk]
+  nome_acessorio varchar [note: "GPS, Cadeirinha, Seguro"]
+  preco_diaria decimal
+}
+
+// ------------------------------------
+// GRUPO 4: TRANSAÇÕES E AUDITORIA
+// ------------------------------------
+Table CONTRATO_LOCACAO {
+  id_contrato int [pk]
+  codigo_contrato varchar [unique]
+  data_retirada date
+  dias_contratados int
+  valor_total decimal
+  canal_reserva varchar [note: "Internet/Tel/Loja"]
+  
+  // Relações
+  id_status int [ref: > DOMINIO_STATUS.id_status]
+  id_cliente int [ref: > CLIENTE.id_cliente]
+  id_carro int [ref: > CARRO.id_carro]
+  id_loja_retirada int [ref: > LOJA.id_loja]
+  id_motorista int [ref: - MOTORISTA.id_motorista] // Opcional (1:0..1)
+  id_preco int [ref: > TABELA_PRECO.id_preco]
+}
+
+Table TRANSACAO_PAGAMENTO {
+  id_transacao int [pk]
+  codigo_transacao varchar
+  valor_pago decimal
+  data_pagamento datetime
+  id_status int [ref: > DOMINIO_STATUS.id_status]
+  id_contrato int [ref: > CONTRATO_LOCACAO.id_contrato]
+}
+
+Table LOCACAO_ACESSORIO { // Tabela N:M
+  id_loc_acessorio int [pk]
+  id_contrato int [ref: > CONTRATO_LOCACAO.id_contrato]
+  id_acessorio int [ref: > ACESSORIO.id_acessorio]
+  quantidade int
+}
+
+Table MANUTENCAO {
+  id_manutencao int [pk]
+  data_inicio datetime
+  data_fim datetime
+  custo decimal
+  id_carro int [ref: > CARRO.id_carro]
+  id_loja_responsavel int [ref: > LOJA.id_loja]
+}
+
+Table LOG_SISTEMA {
+  id_log int [pk]
+  data_hora datetime
+  acao_detalhada varchar
+  id_usuario int [ref: > USUARIO.id_usuario]
+}
