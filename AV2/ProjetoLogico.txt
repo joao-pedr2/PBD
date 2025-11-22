@@ -93,7 +93,9 @@ Table CONTRATO_LOCACAO {
   codigo_contrato varchar [unique]
   data_retirada date
   dias_contratados int
-  valor_total decimal
+  valor_diaria_acordado decimal [note: "Diária de base travada"]
+  valor_acessorios decimal [note: "Custo total dos acessórios"]
+  valor_total decimal [note: "Valor final da locação (Ajuste do Professor)"]
   canal_reserva varchar [note: "Internet/Tel/Loja"]
   
   // Relações
