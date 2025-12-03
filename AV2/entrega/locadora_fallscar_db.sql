@@ -1,18 +1,9 @@
-/*
- * ------------------------------------------------------------------
- * PROJETO: SISTEMA DE LOCADORA DE VEÍCULOS (BACKEND DB)
- * DESCRICAO: Script para criação da estrutura do banco de dados MySQL.
- * ALUNO: João Pedro Silva de Jesus 
- * ------------------------------------------------------------------
- */
 
 CREATE DATABASE IF NOT EXISTS locadora_fallscar_db;
 USE locadora_fallscar_db;
 
--- ==================================================================
--- GRUPO 1: DOMÍNIOS E CONFIGURAÇÕES GERAIS
--- Tabelas auxiliares para padronização de tipos e status
--- ==================================================================
+
+-- GRUPO : DOMÍNIOS E CONFIGURAÇÕES GERAIS
 
 -- Centraliza todos os status do sistema (Carro, Contrato, Pagamento)
 CREATE TABLE DOMINIO_STATUS (
@@ -37,9 +28,8 @@ CREATE TABLE CIDADE (
     uf CHAR(2) NOT NULL DEFAULT 'RJ'
 );
 
--- ==================================================================
--- GRUPO 2: ESTRUTURA ORGANIZACIONAL E PESSOAS
--- ==================================================================
+
+-- GRUPO: ESTRUTURA ORGANIZACIONAL E PESSOAS
 
 CREATE TABLE LOJA (
     id_loja INT AUTO_INCREMENT PRIMARY KEY,
@@ -77,17 +67,14 @@ CREATE TABLE MOTORISTA (
     status_disponibilidade BOOLEAN DEFAULT TRUE COMMENT 'Indica se está livre para viagem'
 );
 
--- ==================================================================
 -- GRUPO 3: FROTA E ATIVOS
--- Regras de precificação e cadastro de veículos
--- ==================================================================
 
 CREATE TABLE CATEGORIA (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
     nome_categoria VARCHAR(50) NOT NULL COMMENT 'Ex: SUV, HATCH, SEDAN LUXO'
 );
 
--- Tabela de preços baseada em pacotes de dias (Regra de Negócio Específica)
+-- Tabela de preços
 CREATE TABLE TABELA_PRECO (
     id_preco INT AUTO_INCREMENT PRIMARY KEY,
     id_categoria INT NOT NULL,
@@ -119,9 +106,7 @@ CREATE TABLE ACESSORIO (
     preco_diaria DECIMAL(10,2) NOT NULL
 );
 
--- ==================================================================
--- GRUPO 4: CORE DO NEGÓCIO - TRANSAÇÕES E AUDITORIA
--- ==================================================================
+-- GRUPO 4: CORE DO NEGÓCIO
 
 CREATE TABLE CONTRATO_LOCACAO (
     id_contrato INT AUTO_INCREMENT PRIMARY KEY,
@@ -187,7 +172,7 @@ CREATE TABLE MANUTENCAO (
     FOREIGN KEY (id_loja_responsavel) REFERENCES LOJA(id_loja)
 );
 
--- Auditoria de ações críticas no sistema
+-- Registro de ações no sistema
 CREATE TABLE LOG_SISTEMA (
     id_log INT AUTO_INCREMENT PRIMARY KEY,
     data_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
