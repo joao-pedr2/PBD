@@ -91,3 +91,28 @@ SET id_status = 1 -- Disponível
 WHERE id_carro = (SELECT id_carro FROM CONTRATO_LOCACAO WHERE id_contrato = @id_contrato_cancelar);
 
 SELECT 'Contrato Cancelado e Histórico Mantido' AS Mensagem;
+
+
+-- ... (Seu código anterior de CANCELAMENTO DE RESERVA termina aqui)
+
+SELECT 'Contrato Cancelado e Histórico Mantido' AS Mensagem;
+
+
+-- TESTANDO O DELETE
+-- Professor, por mais que não seja adequado user o DELETE com o banco de dados, implementei por ter sido solicitado pelo senhor.
+
+-- Teste: registro errado só para ver como o delete funciona
+INSERT INTO CARRO (modelo, placa, id_status, id_categoria, id_loja_atual)
+VALUES ('Carro Teste Delete', 'DEL-9999', 1, 1, 1); 
+
+SET @id_carro_para_excluir = (SELECT id_carro FROM CARRO WHERE placa = 'DEL-9999');
+
+-- Visualizar antes de apagar (Segurança)
+SELECT * FROM CARRO WHERE id_carro = @id_carro_para_excluir;
+
+-- Passo B: Realizar a exclusão física
+DELETE FROM CARRO
+WHERE id_carro = @id_carro_para_excluir;
+
+-- Validação visual
+SELECT 'Registro Excluído Definitivamente' AS Mensagem;
