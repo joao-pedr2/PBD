@@ -92,14 +92,8 @@ WHERE id_carro = (SELECT id_carro FROM CONTRATO_LOCACAO WHERE id_contrato = @id_
 
 SELECT 'Contrato Cancelado e Histórico Mantido' AS Mensagem;
 
-
--- ... (Seu código anterior de CANCELAMENTO DE RESERVA termina aqui)
-
-SELECT 'Contrato Cancelado e Histórico Mantido' AS Mensagem;
-
-
 -- TESTANDO O DELETE
--- Professor, por mais que não seja adequado user o DELETE com o banco de dados, implementei por ter sido solicitado pelo senhor.
+-- Professor, por mais que não seja muito adequado usar o DELETE com o banco de dados, implementei por ter sido solicitado pelo senhor.
 
 -- Teste: registro errado só para ver como o delete funciona
 INSERT INTO CARRO (modelo, placa, id_status, id_categoria, id_loja_atual)
