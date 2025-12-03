@@ -1,7 +1,6 @@
 USE locadora_fallscar_db;
 
 -- CONSULTAR FROTA DISPONÍVEL
-
 SELECT 
     c.id_carro,
     c.modelo,
@@ -14,8 +13,6 @@ JOIN CATEGORIA cat ON c.id_categoria = cat.id_categoria
 JOIN LOJA l ON c.id_loja_atual = l.id_loja
 LEFT JOIN TABELA_PRECO tp ON cat.id_categoria = tp.id_categoria
 WHERE ds.valor_status = 'DISPONIVEL';
-
-
 
 -- REALIZAR LOCAÇÃO 
 SET @id_cliente_escolhido = 2;
@@ -77,7 +74,6 @@ INSERT INTO TRANSACAO_PAGAMENTO (
 SELECT 'Devolução Processada e Carro Liberado' AS Mensagem;
 
 -- CANCELAMENTO DE RESERVA
-
 SET @id_contrato_cancelar = 1; -- Supondo que seja o contrato 1
 
 -- contrato  CANCELADO (id_status = 6)
@@ -101,10 +97,10 @@ VALUES ('Carro Teste Delete', 'DEL-9999', 1, 1, 1);
 
 SET @id_carro_para_excluir = (SELECT id_carro FROM CARRO WHERE placa = 'DEL-9999');
 
--- Visualizar antes de apagar (Segurança)
+-- Visualizar antes de apagar
 SELECT * FROM CARRO WHERE id_carro = @id_carro_para_excluir;
 
--- Passo B: Realizar a exclusão física
+-- Exclusão 
 DELETE FROM CARRO
 WHERE id_carro = @id_carro_para_excluir;
 
